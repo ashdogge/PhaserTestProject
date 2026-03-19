@@ -25,12 +25,14 @@ class GameScene extends Phaser.Scene {
     this.remainingTime;
     this.coinMusic;
     this.backgroundMusic;
+    this.emitter;
   }
   preload() {
     // Preload assets
     this.load.image("bg", "/assets/bg.png");
     this.load.image("basket", "/assets/basket.png");
     this.load.image("apple", "/assets/apple.png");
+    this.load.image("money", "/assets/money.png");
     // Music
     this.load.audio("coin", "/assets/coin.mp3");
     this.load.audio("bgMusic", "/assets/bgMusic.mp3");
@@ -77,6 +79,20 @@ class GameScene extends Phaser.Scene {
     });
     // create timer
     this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
+
+    this.emitter = this.add.particles(0, 0, "money", {
+      speed: 100,
+      gravityY: speedDown - 200,
+      scale: 0.04,
+      duration: 100,
+      emitting: false,
+    });
+    this.emitter.startFollow(
+      this.player,
+      this.player.width / 4,
+      this.player.height / 4,
+      true,
+    );
   }
 
   update() {
@@ -108,9 +124,10 @@ class GameScene extends Phaser.Scene {
   }
   // Function for tracking when target is hit
   targetHit() {
-    this.coinMusic.play()
+    this.coinMusic.play();
     this.target.setY(0);
     this.target.setX(this.getRandomX());
+    this.emitter.start();
     this.points++;
     console.log(this.points);
     this.textScore.setText(`Score: ${this.points}`);
