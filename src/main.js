@@ -17,6 +17,9 @@ class GameScene extends Phaser.Scene {
     this.cursor;
     this.playerSpeed = speedDown + 50;
     this.target;
+    // Create a 'points' variable
+    this.points = 0;
+    this.textScore;
   }
   preload() {
     // Preload assets
@@ -34,12 +37,27 @@ class GameScene extends Phaser.Scene {
     this.player.setImmovable(true);
     this.player.body.allowGravity = false;
     this.player.setCollideWorldBounds(true);
+    // Set offset so that it looks like the apple is falling INTO basket
+    this.player.setSize(80, 15).setOffset(10, 70);
 
     this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
     // Keep the target from accelerating infinitely lol
     this.target.setMaxVelocity(0, speedDown);
 
+    this.physics.add.overlap(
+      this.target,
+      this.player,
+      this.targetHit,
+      null,
+      this,
+    );
+
     this.cursor = this.input.keyboard.createCursorKeys();
+
+    this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
+      font: "25px Arial",
+      fill: "#000000",
+    });
   }
 
   update() {
@@ -59,8 +77,17 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // Function for getting a random X coord to respawn apple
   getRandomX() {
     return Math.floor(Math.random() * 480);
+  }
+  // Function for tracking when target is hit
+  targetHit() {
+    this.target.setY(0);
+    this.target.setX(this.getRandomX());
+    this.points++;
+    console.log(this.points);
+    this.textScore.setText(`Score: ${this.points}`);
   }
 }
 
