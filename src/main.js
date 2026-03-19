@@ -16,11 +16,13 @@ class GameScene extends Phaser.Scene {
     // Cursor controls
     this.cursor;
     this.playerSpeed = speedDown + 50;
+    this.target;
   }
   preload() {
     // Preload assets
     this.load.image("bg", "/assets/bg.png");
     this.load.image("basket", "/assets/basket.png");
+    this.load.image("apple", "/assets/apple.png");
   }
 
   create() {
@@ -32,10 +34,20 @@ class GameScene extends Phaser.Scene {
     this.player.setImmovable(true);
     this.player.body.allowGravity = false;
     this.player.setCollideWorldBounds(true);
+
+    this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
+    // Keep the target from accelerating infinitely lol
+    this.target.setMaxVelocity(0, speedDown);
+
     this.cursor = this.input.keyboard.createCursorKeys();
   }
 
   update() {
+    if (this.target.y >= sizes.height) {
+      this.target.setY(0);
+      this.target.setX(this.getRandomX());
+    }
+
     const { left, right } = this.cursor;
     // If left is down, set velocity X - at playerSpeed
     if (left.isDown) {
@@ -45,6 +57,10 @@ class GameScene extends Phaser.Scene {
     } else {
       this.player.setVelocityX(0);
     }
+  }
+
+  getRandomX() {
+    return Math.floor(Math.random() * 480);
   }
 }
 
