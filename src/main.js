@@ -20,6 +20,7 @@ class GameScene extends Phaser.Scene {
     // Create a 'points' variable
     this.points = 0;
     this.textScore;
+    this.textTime;
   }
   preload() {
     // Preload assets
@@ -55,6 +56,10 @@ class GameScene extends Phaser.Scene {
     this.cursor = this.input.keyboard.createCursorKeys();
 
     this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
+      font: "25px Arial",
+      fill: "#000000",
+    });
+    this.textTime = this.add.text(10, 10, "Remaining Time: 00", {
       font: "25px Arial",
       fill: "#000000",
     });
