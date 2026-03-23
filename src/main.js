@@ -1,6 +1,6 @@
 import "./style.css";
 import Phaser from "phaser";
-
+import Player from "./objects/Player";
 const sizes = {
   width: 500,
   height: 500,
@@ -17,11 +17,11 @@ const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
-    // V Add player object
-    this.player;
-    // Cursor controls
-    this.cursor;
-    this.playerSpeed = speedDown + 50;
+    // // V Add player object
+    // this.player;
+    // // Cursor controls
+    // this.cursor;
+    // this.playerSpeed = speedDown + 50;
     this.target;
     // Create a 'points' variable
     this.points = 0;
@@ -55,14 +55,18 @@ class GameScene extends Phaser.Scene {
     // this.bgMusic.play();
     // Add background
     this.add.image(0, 0, "bg").setOrigin(0, 0);
-    // Add player, assign physics, add sprite, location to add, sprite asset name
-    this.player = this.physics.add.image(0, sizes.height - 50, "basket");
+    // // Add player, assign physics, add sprite, location to add, sprite asset name
+    // this.player = this.physics.add.image(0, sizes.height - 50, "basket");
+
+    // >> Instantiate a 'player' object from the player class <<
+    this.player = new Player(this, 250, 450);
+
     // Set immovable and disallow gravity to keep from falling offscreen
-    this.player.setImmovable(true);
-    this.player.body.allowGravity = false;
-    this.player.setCollideWorldBounds(true);
+    // this.player.setImmovable(true);
+    // this.player.body.allowGravity = false;
+    // this.player.setCollideWorldBounds(true);
     // Set offset so that it looks like the apple is falling INTO basket
-    this.player.setSize(80, 15).setOffset(10, 70);
+    // this.player.setSize(80, 15).setOffset(10, 70);
 
     this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
     // Keep the target from accelerating infinitely lol
@@ -87,7 +91,7 @@ class GameScene extends Phaser.Scene {
       fill: "#000000",
     });
     // create timer
-    this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
+    this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
 
     this.emitter = this.add.particles(0, 0, "money", {
       speed: 100,
@@ -105,6 +109,8 @@ class GameScene extends Phaser.Scene {
   }
 
   update() {
+    this.player.move(this.cursor, 350);
+
     // Timer
     this.remainingTime = this.timedEvent.getRemainingSeconds();
     this.textTime.setText(
@@ -116,15 +122,15 @@ class GameScene extends Phaser.Scene {
       this.target.setX(this.getRandomX());
     }
 
-    const { left, right } = this.cursor;
-    // If left is down, set velocity X - at playerSpeed
-    if (left.isDown) {
-      this.player.setVelocityX(-this.playerSpeed);
-    } else if (right.isDown) {
-      this.player.setVelocityX(this.playerSpeed);
-    } else {
-      this.player.setVelocityX(0);
-    }
+    // const { left, right } = this.cursor;
+    // // If left is down, set velocity X - at playerSpeed
+    // if (left.isDown) {
+    //   this.player.setVelocityX(-this.playerSpeed);
+    // } else if (right.isDown) {
+    //   this.player.setVelocityX(this.playerSpeed);
+    // } else {
+    //   this.player.setVelocityX(0);
+    // }
   }
 
   // Function for getting a random X coord to respawn apple
