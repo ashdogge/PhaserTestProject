@@ -9,7 +9,21 @@
   <body>
     <script type="module" src="/src/main.js"></script>
     <header><p>Phaser Demo | Apple Catcher</p></header>
-    <main><canvas id="gameCanvas"></canvas></main>
+    <main>
+      <canvas id="gameCanvas"></canvas>
+      <div id="gameStartDiv" class="gameUI">
+        <h1>You have 30 seconds to catch apples!</h1>
+        <p>If you catch more than 10 apples you win</p>
+        <p>Catch less than 20 apples, you lost.</p>
+        <button id="gameStartBtn"><p>Start</p></button>
+      </div>
+      <div id="gameEndDiv" class="gameUI">
+        <p>Game Over</p>
+        <h1>You <span id="gameWinLoseSpan"></span></h1>
+        <h1>Final Score: <span id="gameEndScoreSpan"></span></h1>
+        <p>Refresh the page to play again</p>
+      </div>
+    </main>
     <footer><p>Created by Ashdogge 2026</p></footer>
   </body>
 </html>

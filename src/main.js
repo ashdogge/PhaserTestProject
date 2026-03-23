@@ -8,6 +8,12 @@ const sizes = {
 
 const speedDown = 300;
 
+const gameStartDiv = document.querySelector("#gameStartDiv");
+const gameStartBtn = document.querySelector("#gameStartBtn");
+const gameEndDiv = document.querySelector("#gameEndDiv");
+const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
+const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
+
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
@@ -34,16 +40,19 @@ class GameScene extends Phaser.Scene {
     this.load.image("apple", "/assets/apple.png");
     this.load.image("money", "/assets/money.png");
     // Music
-    this.load.audio("coin", "/assets/coin.mp3");
     this.load.audio("bgMusic", "/assets/bgMusic.mp3");
+    this.load.audio("coin", "/assets/coin.mp3");
   }
 
   create() {
+    // Start game paused until 'start'
+    this.scene.pause("scene-game");
+
     // Add coin sound + bgMusic
     this.coinMusic = this.sound.add("coin");
-    this.bgMusic = this.sound.add("bgMusic");
+    // this.bgMusic = this.sound.add("bgMusic");
     // play bgMusic
-    this.bgMusic.play();
+    // this.bgMusic.play();
     // Add background
     this.add.image(0, 0, "bg").setOrigin(0, 0);
     // Add player, assign physics, add sprite, location to add, sprite asset name
@@ -132,6 +141,18 @@ class GameScene extends Phaser.Scene {
     console.log(this.points);
     this.textScore.setText(`Score: ${this.points}`);
   }
+
+  gameOver() {
+    this.sys.game.destroy(true);
+    if (this.points >= 10) {
+      gameEndScoreSpan.textContent = this.points;
+      gameWinLoseSpan.textContent = "Win!";
+    } else {
+      gameEndDiv.style.display = "flex";
+      gameEndScoreSpan.textContent = this.points;
+      gameWinLoseSpan.textContent = "lose!";
+    }
+  }
 }
 
 const config = {
@@ -150,3 +171,8 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+gameStartBtn.addEventListener("click", () => {
+  gameStartDiv.style.display = "none";
+  game.scene.resume("scene-game");
+});
