@@ -1,6 +1,7 @@
 import "./style.css";
 import Phaser from "phaser";
 import Player from "./objects/Player";
+import FallingObject from "./objects/FallingObject";
 const sizes = {
   width: 500,
   height: 500,
@@ -17,12 +18,16 @@ const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
+    //  [ ~~ Moved to ./objects/Player.js ~~]
     // // V Add player object
     // this.player;
     // // Cursor controls
     // this.cursor;
     // this.playerSpeed = speedDown + 50;
-    this.target;
+    //  [~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
+    // [ ~~ Moved to ./objects/FallingObject.js ~~]
+    // this.target;
+    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
     // Create a 'points' variable
     this.points = 0;
     this.textScore;
@@ -60,6 +65,7 @@ class GameScene extends Phaser.Scene {
 
     // >> Instantiate a 'player' object from the player class <<
     this.player = new Player(this, 250, 450);
+    this.target = new FallingObject(this, 0, 0, "apple");
 
     // Set immovable and disallow gravity to keep from falling offscreen
     // this.player.setImmovable(true);
@@ -68,9 +74,9 @@ class GameScene extends Phaser.Scene {
     // Set offset so that it looks like the apple is falling INTO basket
     // this.player.setSize(80, 15).setOffset(10, 70);
 
-    this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
-    // Keep the target from accelerating infinitely lol
-    this.target.setMaxVelocity(0, speedDown);
+    // this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
+    // // Keep the target from accelerating infinitely lol
+    // this.target.setMaxVelocity(0, speedDown);
 
     this.physics.add.overlap(
       this.target,
@@ -118,8 +124,7 @@ class GameScene extends Phaser.Scene {
     );
 
     if (this.target.y >= sizes.height) {
-      this.target.setY(0);
-      this.target.setX(this.getRandomX());
+      this.target.respawn(sizes.height);
     }
 
     // const { left, right } = this.cursor;
@@ -140,8 +145,7 @@ class GameScene extends Phaser.Scene {
   // Function for tracking when target is hit
   targetHit() {
     this.coinMusic.play();
-    this.target.setY(0);
-    this.target.setX(this.getRandomX());
+    this.target.respawn(500);
     this.emitter.start();
     this.points++;
     console.log(this.points);
