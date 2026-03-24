@@ -14,9 +14,9 @@ const speedDown = 300;
 
 const gameStartDiv = document.querySelector("#gameStartDiv");
 const gameStartBtn = document.querySelector("#gameStartBtn");
-const gameEndDiv = document.querySelector("#gameEndDiv");
-const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
-const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
+// const gameEndDiv = document.querySelector("#gameEndDiv");
+// const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
+// const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 
 class GameScene extends Phaser.Scene {
   constructor() {
