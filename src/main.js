@@ -2,6 +2,7 @@ import "./style.css";
 import Phaser from "phaser";
 import Player from "./objects/Player";
 import FallingObject from "./objects/FallingObject";
+import ScoreManager from "./managers/ScoreManager";
 const sizes = {
   width: 500,
   height: 500,
@@ -29,8 +30,10 @@ class GameScene extends Phaser.Scene {
     // this.target;
     // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
     // Create a 'points' variable
-    this.points = 0;
-    this.textScore;
+    // [ ~~ Moved score management to ./managers/ScoreManager.js ~~ ]
+    // this.points = 0;
+    // this.textScore;
+    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
     this.textTime;
     this.timedEvent;
     this.remainingTime;
