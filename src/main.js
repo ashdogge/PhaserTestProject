@@ -6,36 +6,18 @@ import ScoreManager from "./managers/ScoreManager";
 import TimeManager from "./managers/TimeManager";
 import UIManager from "./ui/UIManager";
 const sizes = {
-  width: 500,
-  height: 500,
+  width: window.innerWidth / 2,
+  height: window.innerHeight / 2,
 };
 
 const speedDown = 300;
 
 const gameStartDiv = document.querySelector("#gameStartDiv");
 const gameStartBtn = document.querySelector("#gameStartBtn");
-// const gameEndDiv = document.querySelector("#gameEndDiv");
-// const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
-// const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
-    //  [ ~~ Moved to ./objects/Player.js ~~]
-    // // V Add player object
-    // this.player;
-    // // Cursor controls
-    // this.cursor;
-    // this.playerSpeed = speedDown + 50;
-    //  [~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
-    // [ ~~ Moved to ./objects/FallingObject.js ~~]
-    // this.target;
-    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
-    // Create a 'points' variable
-    // [ ~~ Moved score management to ./managers/ScoreManager.js ~~ ]
-    // this.points = 0;
-    // this.textScore;
-    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
     this.textTime;
     this.timedEvent;
     this.remainingTime;
@@ -45,7 +27,8 @@ class GameScene extends Phaser.Scene {
     this.toWin = 10;
   }
   preload() {
-    // Preload assets
+    this.load.image("anvil", "/assets/anvil.png");
+
     this.load.image("bg", "/assets/bg.png");
     this.load.image("basket", "/assets/basket.png");
     this.load.image("apple", "/assets/apple.png");
@@ -56,34 +39,17 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // Start game paused until 'start'
     this.scene.pause("scene-game");
 
-    // Add coin sound + bgMusic
     this.coinMusic = this.sound.add("coin");
-    // this.bgMusic = this.sound.add("bgMusic");
-    // play bgMusic
-    // this.bgMusic.play();
-    // Add background
-    this.add.image(0, 0, "bg").setOrigin(0, 0);
-    // // Add player, assign physics, add sprite, location to add, sprite asset name
-    // this.player = this.physics.add.image(0, sizes.height - 50, "basket");
 
-    // >> Instantiate a 'player' object from the player class <<
+    // this.add.image(0, 0, "bg").setOrigin(0, 0);
+    this.add.image(sizes.width / 2, sizes.height + -50, "anvil");
+    console.log(Math.round(sizes.height));
     this.player = new Player(this, 250, 450);
     this.target = new FallingObject(this, 0, 0, "apple");
     this.scoreManager = new ScoreManager(this);
-    this.timeManager = new TimeManager(this, 3000, this.gameOver);
-    // Set immovable and disallow gravity to keep from falling offscreen
-    // this.player.setImmovable(true);
-    // this.player.body.allowGravity = false;
-    // this.player.setCollideWorldBounds(true);
-    // Set offset so that it looks like the apple is falling INTO basket
-    // this.player.setSize(80, 15).setOffset(10, 70);
-
-    // this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
-    // // Keep the target from accelerating infinitely lol
-    // this.target.setMaxVelocity(0, speedDown);
+    this.timeManager = new TimeManager(this, 300000, this.gameOver);
 
     this.physics.add.overlap(
       this.target,
@@ -94,17 +60,6 @@ class GameScene extends Phaser.Scene {
     );
 
     this.cursor = this.input.keyboard.createCursorKeys();
-
-    // this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
-    //   font: "25px Arial",
-    //   fill: "#000000",
-    // });
-    // this.textTime = this.add.text(10, 10, "Remaining Time: 00", {
-    //   font: "25px Arial",
-    //   fill: "#000000",
-    // });
-    // create timer
-    // this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
 
     this.emitter = this.add.particles(0, 0, "money", {
       speed: 100,
@@ -123,44 +78,23 @@ class GameScene extends Phaser.Scene {
 
   update() {
     this.player.move(this.cursor, 350);
-    // [ ~~ Moved to ./managers/TimeManager.js ~~]
-    // // Timer
-    // this.remainingTime = this.timedEvent.getRemainingSeconds();
-    // this.textTime.setText(
-    //   `Remaining Time: ${Math.round(this.remainingTime.toString())}`,
-    // );
-    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
 
     this.timeManager.update();
 
     if (this.target.y >= sizes.height) {
       this.target.respawn(sizes.height);
     }
-
-    // const { left, right } = this.cursor;
-    // // If left is down, set velocity X - at playerSpeed
-    // if (left.isDown) {
-    //   this.player.setVelocityX(-this.playerSpeed);
-    // } else if (right.isDown) {
-    //   this.player.setVelocityX(this.playerSpeed);
-    // } else {
-    //   this.player.setVelocityX(0);
-    // }
   }
 
-  // Function for getting a random X coord to respawn apple
   getRandomX() {
     return Math.floor(Math.random() * 480);
   }
-  // Function for tracking when target is hit
+
   targetHit() {
-    this.coinMusic.play();
+    // this.coinMusic.play();
     this.target.respawn(500);
     this.emitter.start();
     this.scoreManager.addPoint();
-    // this.points++;
-    // console.log(this.points);
-    // this.textScore.setText(`Score: ${this.points}`);
   }
 
   gameOver() {
@@ -169,14 +103,6 @@ class GameScene extends Phaser.Scene {
       this.scoreManager.points,
       this.scoreManager.points >= this.toWin,
     );
-    // if (this.points >= 10) {
-    //   gameEndScoreSpan.textContent = this.points;
-    //   gameWinLoseSpan.textContent = "Win!";
-    // } else {
-    //   gameEndDiv.style.display = "flex";
-    //   gameEndScoreSpan.textContent = this.points;
-    //   gameWinLoseSpan.textContent = "lose!";
-    // }
   }
 }
 
