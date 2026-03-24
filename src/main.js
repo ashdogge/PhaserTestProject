@@ -19,21 +19,21 @@ const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
-    //  [ ~~ Moved to ./objects/Player.js ~~]
-    // // V Add player object
-    // this.player;
-    // // Cursor controls
-    // this.cursor;
-    // this.playerSpeed = speedDown + 50;
-    //  [~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
-    // [ ~~ Moved to ./objects/FallingObject.js ~~]
-    // this.target;
-    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
-    // Create a 'points' variable
-    // [ ~~ Moved score management to ./managers/ScoreManager.js ~~ ]
-    // this.points = 0;
-    // this.textScore;
-    // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
+      //  [ ~~ Moved to ./objects/Player.js ~~]
+      // // V Add player object
+      // this.player;
+      // // Cursor controls
+      // this.cursor;
+      // this.playerSpeed = speedDown + 50;
+      //  [~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
+      // [ ~~ Moved to ./objects/FallingObject.js ~~]
+      // this.target;
+      // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]
+      // Create a 'points' variable
+      // [ ~~ Moved score management to ./managers/ScoreManager.js ~~ ]
+      // this.points = 0;
+      // this.textScore;
+      // [ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
     this.textTime;
     this.timedEvent;
     this.remainingTime;
