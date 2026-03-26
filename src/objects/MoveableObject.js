@@ -5,21 +5,34 @@ export default class MoveableObject extends Phaser.Physics.Arcade.Image {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setInteractive({ draggable: true });
-    this.setImmovable(true);
+
     this.body.allowGravity = true;
     this.setCollideWorldBounds(true);
     this.setSize(sizeX, sizeY);
+    this.setBounce(0.5);
 
-    // TODO: Make 'draggable' interactive items their own class
-    this.on("dragstart", () => {
-      this.body.moves = false; // Disable physics updates
-    });
-    this.on("drag", (pointer, dragX, dragY) => {
-      this.setPosition(dragX, dragY);
+    // this.on("dragstart", () => {
+    //   this.body.moves = false; // Disable physics updates
+    // });
+    this.on("drag", (pointer) => {
+      const distance = Phaser.Math.Distance.Between(
+        this.x,
+        this.y,
+        pointer.x,
+        pointer.y,
+      );
+      this.setBounce(0.0);
+      // Only move if the cursor is at least 10 pixels away
+      if (distance > 10) {
+        this.scene.physics.moveTo(this, pointer.x, pointer.y, 1000);
+      } else {
+        // Stop the hammer if it's close enough to the cursor
+        this.body.setVelocity(0);
+      }
     });
     this.on("dragend", () => {
-      this.body.moves = true; // Re-enable physics when dropped
-      // this.body.setVelocity(0); // Optional: stop it from "snapping" away
+      this.body.setVelocity(0); // Stop it from sliding when released
+      this.body.setBounce(0.5);
     });
   }
 }

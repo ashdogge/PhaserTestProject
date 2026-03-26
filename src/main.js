@@ -7,6 +7,7 @@ import TimeManager from "./managers/TimeManager";
 import UIManager from "./ui/UIManager";
 
 import MoveableObject from "./objects/MoveableObject";
+import StaticObject from "./objects/StaticObject";
 const sizes = {
   width: window.innerWidth - 100,
   height: window.innerHeight - 300,
@@ -47,7 +48,15 @@ class GameScene extends Phaser.Scene {
     this.coinMusic = this.sound.add("coin");
 
     this.add.image(0, 0, "bg").setOrigin(0, 0).setScale(2, 2);
-    this.add.image(sizes.width / 2, sizes.height + -50, "anvil");
+    // this.add.image(sizes.width / 2, sizes.height + -50, "anvil");
+    this.anvil = new StaticObject(
+      this,
+      sizes.width / 2,
+      sizes.height,
+      "anvil",
+      200,
+      100,
+    );
     console.log(Math.round(sizes.height));
     // this.player = new Player(this, 250, 450);
     this.hammer = new MoveableObject(this, 5, 5, "hammer", 80, 41);
@@ -55,15 +64,7 @@ class GameScene extends Phaser.Scene {
     this.scoreManager = new ScoreManager(this);
     // this.timeManager = new TimeManager(this, 300000, this.gameOver);
 
-    this.physics.add.overlap(
-      // this.target,
-      // this.player,
-      this.hammer,
-      this.anvil,
-      this.targetHit,
-      null,
-      this,
-    );
+    this.physics.add.collider(this.anvil, this.hammer);
 
     this.cursor = this.input.keyboard.createCursorKeys();
 
@@ -109,6 +110,7 @@ class GameScene extends Phaser.Scene {
     );
   }
 }
+// TODO: Switch to 'matter' physics for better sim
 
 const config = {
   type: Phaser.WEBGL,
