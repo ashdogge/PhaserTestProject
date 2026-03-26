@@ -1,6 +1,6 @@
-export default class Hammer extends Phaser.Physics.Arcade.Image {
-  constructor(scene, x, y) {
-    super(scene, x, y, "hammer");
+export default class MoveableObject extends Phaser.Physics.Arcade.Image {
+  constructor(scene, x, y, texture, sizeX, sizeY) {
+    super(scene, x, y, texture);
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -8,7 +8,7 @@ export default class Hammer extends Phaser.Physics.Arcade.Image {
     this.setImmovable(true);
     this.body.allowGravity = true;
     this.setCollideWorldBounds(true);
-    this.setSize(81, 40);
+    this.setSize(sizeX, sizeY);
 
     // TODO: Make 'draggable' interactive items their own class
     this.on("dragstart", () => {

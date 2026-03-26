@@ -5,7 +5,8 @@ import FallingObject from "./objects/FallingObject";
 import ScoreManager from "./managers/ScoreManager";
 import TimeManager from "./managers/TimeManager";
 import UIManager from "./ui/UIManager";
-import Hammer from "./objects/Hammer";
+
+import MoveableObject from "./objects/MoveableObject";
 const sizes = {
   width: window.innerWidth - 100,
   height: window.innerHeight - 300,
@@ -49,7 +50,7 @@ class GameScene extends Phaser.Scene {
     this.add.image(sizes.width / 2, sizes.height + -50, "anvil");
     console.log(Math.round(sizes.height));
     // this.player = new Player(this, 250, 450);
-    this.hammer = new Hammer(this, 259, 450);
+    this.hammer = new MoveableObject(this, 5, 5, "hammer", 80, 41);
     // this.target = new FallingObject(this, 0, 0, "apple");
     this.scoreManager = new ScoreManager(this);
     // this.timeManager = new TimeManager(this, 300000, this.gameOver);
